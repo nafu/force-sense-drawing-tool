@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Drawing Tool</title>
+  <style>
+    html, body {
+      width: 800px;
+      height: 600px;
+    }
+    #sketch {
+      border: 10px solid gray;
+      height: 100%;
+    }
+  </style>
+  <script src="js/debug-utility.js"></script>
+  <script src="js/alasql.min.js"></script>
+</head>
+<body>
+  <button onclick="window.exportData()">Export data to CSV file</button>
+  <div id="sketch">
+    <canvas id="paint"></canvas>
+  </div>
+  <script>
+  (function() {
+    var canvas = document.querySelector('#paint');
+    var ctx = canvas.getContext('2d');
+
+    var sketch = document.querySelector('#sketch');
+    var sketch_style = getComputedStyle(sketch);
+    canvas.width = parseInt(sketch_style.getPropertyValue('width'));
+    canvas.height = parseInt(sketch_style.getPropertyValue('height'));
+
+    var mouse = {x: 0, y: 0};
+    var last_mouse = {x: 0, y: 0};
+
+    var is_mouse_down = false;
+    var is_drawing = false
+
+    var plots = []
+
+    /* Mouse Capturing Work */
+    canvas.addEventListener('mousemove', function(e) {
+      last_mouse.x = mouse.x;
+      last_mouse.y = mouse.y;
+
+      mouse.x = e.pageX - this.offsetLeft;
+      mouse.y = e.pageY - this.offsetTop;
+      if (mouse.x < 10 || mouse.x > 770 || mouse.y < 10 || mouse.y > 570) {
+        is_mouse_down = false;
+        canvas.removeEventListener('mousemove', onPaint, false);
+        log('out of bound');
+      }
+    }, false);
+
+    /* Drawing on Paint App */
+    ctx.lineWidth = 5;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'blue';
+
+    canvas.addEventListener('mousedown', function(e) {
+      is_mouse_down = true;
+      canvas.addEventListener('mousemove', onPaint, false);
+    }, false);
+
+    canvas.addEventListener('mouseup', function() {
+      is_mouse_down = false;
+      canvas.removeEventListener('mousemove', onPaint, false);
+    }, false);
+
+    var onPaint = function() {
+      ctx.beginPath();
+      ctx.moveTo(last_mouse.x, last_mouse.y);
+      ctx.lineTo(mouse.x, mouse.y);
+      ctx.closePath();
+      ctx.stroke();
+      log('mouse.x = ' + mouse.x);
+      log('mouse.y = ' + mouse.y);
+      plots.push([mouse.x, 600 - mouse.y]);
+      log('plots = ' + plots);
+    };
+
+    window.exportData = function exportData() {
+      log('exportData');
+      log('plots = ', plots);
+      plots.unshift(['x', 'y']);
+      alasql("SELECT * INTO CSV('forces.csv') FROM ?", [plots]);
+    }
+  }());
+  </script>
+</body>
+</html>
