@@ -17,10 +17,19 @@
   <script src="js/alasql.min.js"></script>
 </head>
 <body>
+  <input id="readfile" type="file" onchange="loadFile(event)"/>
   <button onclick="window.exportData()">Export data to CSV file</button>
   <div id="sketch">
     <canvas id="paint"></canvas>
   </div>
+  <script>
+    function loadFile(event) {
+      alasql('SELECT * FROM CSV(?, {headers:true})', [event],function(data) {
+        // Process data here
+        log(data);
+      });
+     }
+  </script>
   <script>
   (function() {
     var canvas = document.querySelector('#paint');
