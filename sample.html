@@ -59,6 +59,12 @@
 
     var plots = []
 
+    var img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, -30, 450);
+    }
+    img.src = "img/x-axis.png";
+
     /* Mouse Capturing Work */
     canvas.addEventListener('mousemove', function(e) {
       last_mouse.x = mouse.x;
