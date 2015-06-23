@@ -104,6 +104,7 @@
       log('plots = ', plots);
       plots.unshift(['x', 'y']);
       alasql("SELECT * INTO CSV('forces.csv') FROM ?", [plots]);
+      plots = []
     }
 
     document.addEventListener("mouseout", function(e) {
