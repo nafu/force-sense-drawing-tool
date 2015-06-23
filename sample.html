@@ -66,11 +66,6 @@
 
       mouse.x = e.pageX - this.offsetLeft;
       mouse.y = e.pageY - this.offsetTop;
-      if (mouse.x < 10 || mouse.x > 770 || mouse.y < 10 || mouse.y > 570) {
-        is_mouse_down = false;
-        canvas.removeEventListener('mousemove', onPaint, false);
-        log('out of bound');
-      }
     }, false);
 
     /* Drawing on Paint App */
@@ -80,12 +75,15 @@
     ctx.strokeStyle = 'blue';
 
     canvas.addEventListener('mousedown', function(e) {
-      is_mouse_down = true;
       canvas.addEventListener('mousemove', onPaint, false);
     }, false);
 
     canvas.addEventListener('mouseup', function() {
-      is_mouse_down = false;
+      canvas.removeEventListener('mousemove', onPaint, false);
+    }, false);
+
+    canvas.addEventListener('mouseout', function() {
+      log('canvas mouseout')
       canvas.removeEventListener('mousemove', onPaint, false);
     }, false);
 
@@ -107,6 +105,15 @@
       plots.unshift(['x', 'y']);
       alasql("SELECT * INTO CSV('forces.csv') FROM ?", [plots]);
     }
+
+    document.addEventListener("mouseout", function(e) {
+      e = e ? e : window.event;
+      var from = e.relatedTarget || e.toElement;
+      if (!from || from.nodeName == "HTML") {
+        log("left window");
+        canvas.removeEventListener('mousemove', onPaint, false);
+      }
+    });
   }());
   </script>
 </body>
