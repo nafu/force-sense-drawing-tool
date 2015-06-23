@@ -4,23 +4,34 @@
   <meta charset="UTF-8">
   <title>Drawing Tool</title>
   <style>
-    html, body {
+    .container {
+      width: 1000px;
+    }
+    .fileio {
       width: 800px;
-      height: 600px;
+      height: 40px;
+      padding-top: 10px;
+      margin: 0 auto;
     }
     #sketch {
+      width: 800px;
+      height: 600px;
+      margin: 0 auto;
       border: 10px solid gray;
-      height: 100%;
     }
   </style>
   <script src="js/debug-utility.js"></script>
   <script src="js/alasql.min.js"></script>
 </head>
 <body>
-  <input id="readfile" type="file" onchange="loadFile(event)"/>
-  <button onclick="window.exportData()">Export data to CSV file</button>
-  <div id="sketch">
-    <canvas id="paint"></canvas>
+  <div class="container">
+    <div class="fileio">
+      <input id="readfile" type="file" onchange="loadFile(event)"/>
+      <button onclick="window.exportData()">Export data to CSV file</button>
+    </div>
+    <div id="sketch">
+      <canvas id="paint"></canvas>
+    </div>
   </div>
   <script>
     function loadFile(event) {
