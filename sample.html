@@ -59,17 +59,11 @@
 
     var plots = []
 
-    var x_axis_img = new Image();
-    x_axis_img.onload = function () {
-      ctx.drawImage(x_axis_img, 30, 500, 700, 100);
+    var xy_axis_img = new Image();
+    xy_axis_img.onload = function () {
+      ctx.drawImage(xy_axis_img, 10, 50, 600, 523);
     }
-    x_axis_img.src = "img/x-axis.png";
-
-    var y_axis_img = new Image();
-    y_axis_img.onload = function () {
-      ctx.drawImage(y_axis_img, -30, 50, 150, 500);
-    }
-    y_axis_img.src = "img/y-axis.png";
+    xy_axis_img.src = "img/xy.png";
 
     /* Mouse Capturing Work */
     canvas.addEventListener('mousemove', function(e) {
