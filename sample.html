@@ -113,7 +113,8 @@
       log('exportData');
       log('plots = ', plots);
       plots.unshift(['x', 'y']);
-      alasql("SELECT * INTO CSV('forces.csv') FROM ?", [plots]);
+      var filename = 'force';
+      alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
       plots = []
     }
 
