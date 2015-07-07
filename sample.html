@@ -94,6 +94,9 @@
       canvas.removeEventListener('mousemove', onPaint, false);
     }, false);
 
+    // Touch
+    canvas.addEventListener('touchmove', onPaint, false);
+
     var onPaint = function() {
       ctx.beginPath();
       ctx.moveTo(last_mouse.x, last_mouse.y);
