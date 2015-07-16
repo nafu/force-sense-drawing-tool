@@ -1,4 +1,7 @@
 (function() {
+  /** Constants */
+  var DEFAULT_STROKE_STYLE = 'blue';
+
   var canvas = document.querySelector('#paint');
   var ctx = canvas.getContext('2d');
 
@@ -31,7 +34,16 @@
   ctx.lineWidth = 5;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  ctx.strokeStyle = 'blue';
+  ctx.strokeStyle = DEFAULT_STROKE_STYLE;
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
   // Mouse
   canvas.addEventListener('mousedown', function(e) {
@@ -93,6 +105,8 @@
   };
 
   function drawLineFromArray(arr) {
+    // Change strokeStyle for imported data
+    ctx.strokeStyle = getRandomColor();
     ctx.beginPath();
     log('arr[0]');
     log(arr[0]);
@@ -109,6 +123,8 @@
       ctx.lineTo(convertXToGraphPoint(dot['1']), convertYToGraphPoint(dot['3']));
     }
     ctx.stroke();
+    // Change back strokeStyle as default
+    ctx.strokeStyle = DEFAULT_STROKE_STYLE;
   };
 
   function convertXToGraphPoint(x) {
