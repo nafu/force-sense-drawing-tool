@@ -1,0 +1,17 @@
+.container {
+  width: 1000px;
+}
+
+.fileio {
+  width: 800px;
+  height: 40px;
+  padding-top: 10px;
+  margin: 0 auto;
+}
+
+#sketch {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  border: 10px solid gray;
+}
