@@ -26,21 +26,13 @@
 <body>
   <div class="container">
     <div class="fileio">
-      <input id="readfile" type="file" onchange="loadFile(event)"/>
+      <input id="readfile" type="file" onchange="window.loadFile(event)"/>
       <button onclick="window.exportData()">Export data to CSV file</button>
     </div>
     <div id="sketch">
       <canvas id="paint"></canvas>
     </div>
   </div>
-  <script>
-    function loadFile(event) {
-      alasql('SELECT * FROM CSV(?, {headers:true})', [event],function(data) {
-        // Process data here
-        log(data);
-      });
-     }
-  </script>
   <script>
   (function() {
     var canvas = document.querySelector('#paint');
@@ -126,6 +118,13 @@
         canvas.removeEventListener('mousemove', onPaint, false);
       }
     });
+
+    window.loadFile = function loadFile(event) {
+      alasql('SELECT * FROM CSV(?, {headers: true})', [event],function(data) {
+        // Process data here
+        log(data);
+      });
+    };
   }());
   </script>
 </body>
