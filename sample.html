@@ -108,7 +108,7 @@
       var filename = 'force';
       alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
       plots = []
-    }
+    };
 
     document.addEventListener("mouseout", function(e) {
       e = e ? e : window.event;
