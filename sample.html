@@ -120,7 +120,7 @@
     });
 
     window.loadFile = function loadFile(event) {
-      alasql('SELECT * FROM CSV(?, {headers: true})', [event],function(data) {
+      alasql('SELECT * FROM CSV(?, {headers: false})', [event],function(data) {
         // Process data here
         log(data);
       });
