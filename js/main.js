@@ -10,9 +10,6 @@
   var mouse = {x: 0, y: 0};
   var last_mouse = {x: 0, y: 0};
 
-  var is_mouse_down = false;
-  var is_drawing = false
-
   var plots = []
 
   var xy_axis_img = new Image();
