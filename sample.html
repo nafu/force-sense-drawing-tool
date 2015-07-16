@@ -119,10 +119,24 @@
       }
     });
 
+    /**
+     * Remove first 3 row
+     *
+     * @param {array} arr - The array of the plots from csv
+     */
+    function removeHeader(arr) {
+      for(i = 0; i < 3; i++) {
+        arr.shift();
+      }
+      return arr
+    };
+
     window.loadFile = function loadFile(event) {
       alasql('SELECT * FROM CSV(?, {headers: false})', [event],function(data) {
         // Process data here
         log(data);
+        arr = removeHeader(data);
+        log(arr);
       });
     };
   }());
