@@ -131,12 +131,50 @@
       return arr
     };
 
+    function drawLineFromArray(arr) {
+      ctx.beginPath();
+      log('arr[0]');
+      log(arr[0]);
+      ctx.moveTo(convertXToGraphPoint(arr[0]['1']), convertYToGraphPoint(arr[0]['3']));
+      arr.shift();
+      for(i = 0; i < arr.length; i++) {
+        var dot = arr[i]
+        log('dot');
+        log(dot);
+        log("dot['1'], dot['3']");
+        log(dot['1'] + ',' + dot['3']);
+        // Check if data is empty because perforation data have empty data at last line
+        if(dot['1'].length == 0 || dot['3'].length == 0) { continue; }
+        ctx.lineTo(convertXToGraphPoint(dot['1']), convertYToGraphPoint(dot['3']));
+      }
+      ctx.stroke();
+    };
+
+    function convertXToGraphPoint(x) {
+      // TODO:
+      // - Use origin x of coordinates instead of fixed value(147)
+      // - Use correct scale according to range of values
+      x_origin = 147;
+      x_scale = 50;
+      return x_origin + (x * x_scale)
+    }
+
+    function convertYToGraphPoint(y) {
+      // TODO:
+      // - Use origin y of coordinates instead of fixed value(512)
+      // - Use correct scale according to range of values
+      y_origin = 512;
+      y_scale = 50;
+      return y_origin - (y * y_scale)
+    }
+
     window.loadFile = function loadFile(event) {
       alasql('SELECT * FROM CSV(?, {headers: false})', [event],function(data) {
         // Process data here
         log(data);
         arr = removeHeader(data);
         log(arr);
+        drawLineFromArray(arr)
       });
     };
   }());
