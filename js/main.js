@@ -7,31 +7,36 @@
     this.canvas.width = parseInt(sketch_style.getPropertyValue('width'));
     this.canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
-    this.minX = config.minX;
-    this.minY = config.minY;
     this.maxX = config.maxX;
     this.maxY = config.maxY;
     this.unitsPerTick = config.unitsPerTick;
 
+    this.originX = 50;
+    this.originY = this.canvas.height - 50;
+
     // constants
+    this.minX = 0;
+    this.minY = 0;
     this.axisColor = '#aaa';
     this.font = '8pt Calibri';
     this.tickSize = 20;
     this.strokeStyle = 'blue'
 
     // relationships
+    graphWidth = this.canvas.width - this.originX;
+    graphHeight = this.originY;
     this.context = this.canvas.getContext('2d')
     this.rangeX = this.maxX - this.minX;
     this.rangeY = this.maxY - this.minY;
     this.unitX = this.canvas.width / this.rangeX;
     this.unitY = this.canvas.height / this.rangeY;
-    this.centerX = Math.round(Math.abs(this.minX = this.rangeX) * this.canvas.width);
-    this.centerY = Math.round(Math.abs(this.minY = this.rangeY) * this.canvas.height);
-    this.iteration = (this.maxX - this.minX) / 1000;
-    this.scaleX = this.canvas.width / this.rangeX;
-    this.scaleY = this.canvas.height / this.rangeY;
+    this.centerX = Math.round(graphWidth / 2) + this.originX;
+    this.centerY = Math.round(graphHeight / 2);
+    this.scaleX = graphWidth / this.rangeX;
+    this.scaleY = graphHeight / this.rangeY;
 
     this.drawImage();
+    this.drawXAxis();
 
     this.mouse = {x: 0, y: 0};
     this.last_mouse = {x: 0, y: 0};
@@ -99,6 +104,51 @@
     xy_axis_img.src = 'img/xy.png';
   }
 
+  Graph.prototype.drawXAxis = function() {
+    log('drawXAxis');
+    var axisX = this.originX;
+    var axisY = this.originY;
+    var context = this.context;
+    context.save();
+    context.beginPath();
+    context.moveTo(axisX, axisY);
+    context.lineTo(this.canvas.width, this.originY);
+    context.strokeStyle = this.axisColor;
+    context.lineWidth = 2;
+    context.stroke();
+
+    // draw tick marks
+    var xPosIncrement = this.unitsPerTick * this.unitX;
+    var xPos = axisX;
+    var unit = 0;
+    context.font = this.font;
+    context.textAlign = 'center';
+    context.textBaseline = 'top';
+    log('xPos');
+    log(xPos);
+    log('unit');
+    log(unit);
+    while(xPos < this.canvas.width) {
+      log('while');
+      context.moveTo(xPos, axisY - this.tickSize / 2);
+      context.lineTo(xPos, axisY);
+      context.stroke();
+      context.fillText(unit, xPos, axisY + 3);
+      unit += this.unitsPerTick;
+      xPos = Math.round(xPos + xPosIncrement);
+      log('while')
+      log('xPos');
+      log(xPos);
+      log('unit');
+      log(unit);
+    }
+
+    // draw x-axis label
+    context.fillText('Depth(m)', this.centerX, axisY + 3 + 15)
+
+    context.restore();
+  }
+
   Graph.prototype.drawLineFromArray = function(arr) {
     var context = this.context;
     // Change strokeStyle for imported data
@@ -150,7 +200,14 @@
     return y_origin - (y * y_scale)
   }
 
-  var myGraph = new Graph({canvasId: 'paint'});
+  var myGraph = new Graph({
+    canvasId: 'paint',
+    maxX: 10,
+    maxY: 10,
+    unitsPerTick: 1
+  });
+  log('myGraph');
+  log(myGraph);
 
   window.exportData = function exportData() {
     log('exportData');
