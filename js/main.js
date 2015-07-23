@@ -54,6 +54,7 @@
     this.setupInitialContext();
     this.constructEventListner(_self);
     this.drawXAxis();
+    this.drawYAxis();
   }
 
   Graph.prototype.setupInitialContext = function() {
@@ -149,6 +150,53 @@
 
     // draw x-axis label
     context.fillText(this.xlabel, this.centerX, axisY + 3 + 15)
+
+    context.restore();
+  }
+
+  Graph.prototype.drawYAxis = function() {
+    log('drawYAxis');
+    var axisX = this.originX;
+    var axisY = this.originY;
+    var context = this.context;
+    context.save();
+    context.beginPath();
+    context.moveTo(axisX, axisY);
+    context.lineTo(axisX, 0);
+    context.strokeStyle = this.axisColor;
+    context.lineWidth = 2;
+    context.stroke();
+
+    // draw tick marks
+    var yPosIncrement = this.unitsPerTick * this.unitY;
+    log('yPosIncrement')
+    log(yPosIncrement)
+    var yPos = axisY;
+    var unit = 0;
+    context.font = this.font;
+    context.textAlign = 'right';
+    context.textBaseline = 'middle';
+    log('yPos');
+    log(yPos);
+    log('unit');
+    log(unit);
+    while(yPos > 0) {
+      log('while');
+      context.moveTo(axisX, yPos);
+      context.lineTo(axisX + this.tickSize / 2, yPos);
+      context.stroke();
+      context.fillText(unit, axisX - 3, yPos);
+      unit += this.unitsPerTick;
+      yPos = Math.round(yPos - yPosIncrement);
+      log('while')
+      log('yPos');
+      log(yPos);
+      log('unit');
+      log(unit);
+    }
+
+    // draw x-axis label
+    context.fillText(this.ylabel, axisX - 3 - 15, this.centerY);
 
     context.restore();
   }
