@@ -1,20 +1,29 @@
 (function() {
   function Graph(config) {
     // user defined properties
+
+    // canvas
     this.canvas = document.getElementById(config.canvasId);
     var sketch = document.querySelector('#sketch');
     var sketch_style = getComputedStyle(sketch);
     this.canvas.width = parseInt(sketch_style.getPropertyValue('width'));
     this.canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
+    // graph
     this.xlabel = config.xlabel;
     this.ylabel = config.ylabel;
     this.maxX = config.maxX;
     this.maxY = config.maxY;
     this.unitsPerTick = config.unitsPerTick;
-
     this.originX = 50;
     this.originY = this.canvas.height - 50;
+
+    // user interaction
+    this.mouse = {x: 0, y: 0};
+    this.last_mouse = {x: 0, y: 0};
+
+    // user drawing plots
+    this.plots = []
 
     // constants
     this.minX = 0;
@@ -37,14 +46,21 @@
     this.scaleX = graphWidth / this.rangeX;
     this.scaleY = graphHeight / this.rangeY;
 
-    this.drawXAxis();
-
-    this.mouse = {x: 0, y: 0};
-    this.last_mouse = {x: 0, y: 0};
-
-    this.plots = []
-
     var _self = this;
+    this.setupInitialContext();
+    this.constructEventListner(_self);
+    this.drawXAxis();
+  }
+
+  Graph.prototype.setupInitialContext = function() {
+    var context = this.context;
+    context.lineWidth = 5;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.strokeStyle = this.strokeStyle;
+  }
+
+  Graph.prototype.constructEventListner = function(_self) {
     /* Mouse Capturing Work */
     this.canvas.addEventListener('mousemove', function(e) {
       log(_self.last_mouse);
@@ -55,28 +71,20 @@
       _self.mouse.y = e.pageY - this.offsetTop;
     }, false);
 
-    var context = this.context;
-    /* Drawing on Paint App */
-    context.lineWidth = 5;
-    context.lineJoin = 'round';
-    context.lineCap = 'round';
-    context.strokeStyle = this.strokeStyle;
-
     this.onPaintRef = _self.onPaint.bind(_self);
+
     // Touch
-    this.canvas.addEventListener('touchmove', this.onPaintRef, false);
+    this.canvas.addEventListener('touchmove', _self.onPaintRef, false);
 
     // Mouse
     this.canvas.addEventListener('mousedown', function() {
       log('canvas mousedown')
       this.addEventListener('mousemove', _self.onPaintRef, false);
     }, false);
-
     this.canvas.addEventListener('mouseup', function() {
       log('canvas mouseup')
       this.removeEventListener('mousemove', _self.onPaintRef, false);
     }, false);
-
     this.canvas.addEventListener('mouseout', function() {
       log('canvas mouseout')
       this.removeEventListener('mousemove', _self.onPaintRef, false);
