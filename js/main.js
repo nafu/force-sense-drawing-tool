@@ -15,7 +15,7 @@
     this.maxX = config.maxX;
     this.maxY = config.maxY;
     this.unitsPerTick = config.unitsPerTick;
-    this.originX = 50;
+    this.originX = 70;
     this.originY = this.canvas.height - 50;
 
     // user interaction
@@ -246,8 +246,8 @@
     canvasId: 'paint',
     xlabel: 'Depth(mm)',
     ylabel: 'Force(N)',
-    maxX: 10,
-    maxY: 10,
+    maxX: 12,
+    maxY: 15,
     unitsPerTick: 1
   });
   log('myGraph');
