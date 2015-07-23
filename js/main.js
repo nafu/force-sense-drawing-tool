@@ -45,6 +45,10 @@
     this.centerY = Math.round(graphHeight / 2);
     this.scaleX = graphWidth / this.rangeX;
     this.scaleY = graphHeight / this.rangeY;
+    log('scaleX');
+    log(this.scaleX);
+    log('scaleY');
+    log(this.scaleY);
 
     var _self = this;
     this.setupInitialContext();
@@ -183,21 +187,11 @@
   }
 
   Graph.prototype.convertXToGraphPoint = function(x) {
-    // TODO:
-    // - Use origin x of coordinates instead of fixed value(147)
-    // - Use correct scale according to range of values
-    x_origin = 147;
-    x_scale = 50;
-    return x_origin + (x * x_scale)
+    return this.originX + (x * this.scaleX)
   }
 
   Graph.prototype.convertYToGraphPoint = function(y) {
-    // TODO:
-    // - Use origin y of coordinates instead of fixed value(512)
-    // - Use correct scale according to range of values
-    y_origin = 512;
-    y_scale = 50;
-    return y_origin - (y * y_scale)
+    return this.originY - (y * this.scaleY)
   }
 
   var myGraph = new Graph({
