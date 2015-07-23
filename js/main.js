@@ -39,8 +39,8 @@
     this.context = this.canvas.getContext('2d')
     this.rangeX = this.maxX - this.minX;
     this.rangeY = this.maxY - this.minY;
-    this.unitX = this.canvas.width / this.rangeX;
-    this.unitY = this.canvas.height / this.rangeY;
+    this.unitX = graphWidth / this.rangeX;
+    this.unitY = graphHeight / this.rangeY;
     this.centerX = Math.round(graphWidth / 2) + this.originX;
     this.centerY = Math.round(graphHeight / 2);
     this.scaleX = graphWidth / this.rangeX;
