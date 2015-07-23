@@ -7,6 +7,8 @@
     this.canvas.width = parseInt(sketch_style.getPropertyValue('width'));
     this.canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
+    this.xlabel = config.xlabel;
+    this.ylabel = config.ylabel;
     this.maxX = config.maxX;
     this.maxY = config.maxY;
     this.unitsPerTick = config.unitsPerTick;
@@ -134,7 +136,7 @@
     }
 
     // draw x-axis label
-    context.fillText('Depth(m)', this.centerX, axisY + 3 + 15)
+    context.fillText(this.xlabel, this.centerX, axisY + 3 + 15)
 
     context.restore();
   }
@@ -192,6 +194,8 @@
 
   var myGraph = new Graph({
     canvasId: 'paint',
+    xlabel: 'Depth(mm)',
+    ylabel: 'Force(N)',
     maxX: 10,
     maxY: 10,
     unitsPerTick: 1
