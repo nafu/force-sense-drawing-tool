@@ -35,7 +35,6 @@
     this.scaleX = graphWidth / this.rangeX;
     this.scaleY = graphHeight / this.rangeY;
 
-    this.drawImage();
     this.drawXAxis();
 
     this.mouse = {x: 0, y: 0};
@@ -93,15 +92,6 @@
     log('mouse.y = ' + this.mouse.y);
     this.plots.push([this.mouse.x, 600 - this.mouse.y]);
     log('plots = ' + this.plots);
-  }
-
-  Graph.prototype.drawImage = function() {
-    var context = this.context;
-    var xy_axis_img = new Image();
-    xy_axis_img.onload = function () {
-      context.drawImage(xy_axis_img, 10, 50, 600, 523);
-    }
-    xy_axis_img.src = 'img/xy.png';
   }
 
   Graph.prototype.drawXAxis = function() {
