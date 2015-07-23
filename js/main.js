@@ -254,8 +254,10 @@
   log(myGraph);
 
   window.exportData = function exportData() {
+    var plots = [].concat(myGraph.plots);
     log('exportData');
     log('plots = ', plots);
+    log('myGraph.plots = ', myGraph.plots);
     plots.unshift(['x', 'y']);
     var filename = 'force';
     alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
