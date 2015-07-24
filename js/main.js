@@ -52,7 +52,7 @@
       log(data);
       arr = removeHeader(data);
       log(arr);
-      myGraph.drawLineFromArray(arr);
+      myGraph.drawLineFromArray(filename, arr);
     });
   };
 }());
