@@ -24,6 +24,9 @@ function Graph(config) {
   // user drawing plots
   this.plots = []
 
+  // imported plots
+  this.imported_plots = []
+
   // constants
   this.minX = 0;
   this.minY = 0;
