@@ -43,6 +43,10 @@
   };
 
   window.loadFile = function loadFile(event) {
+    log('event');
+    log(event);
+    var files = event.target.files;
+    var filename = files[0].name;
     alasql('SELECT * FROM CSV(?, {headers: false})', [event],function(data) {
       // Process data here
       log(data);
