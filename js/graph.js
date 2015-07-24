@@ -31,6 +31,7 @@ function Graph(config) {
   this.font = '8pt Calibri';
   this.tickSize = 20;
   this.strokeStyle = 'blue'
+  this.legend_font = '12pt Calibri';
 
   // relationships
   graphWidth = this.canvas.width - this.originX;
@@ -220,9 +221,38 @@ Graph.prototype.drawLineFromArray = function(arr) {
     context.lineTo(this.convertXToGraphPoint(dot['1']), this.convertYToGraphPoint(dot['3']));
   }
   context.stroke();
+
+  this.addLegend();
+
   // Change back strokeStyle as default
   context.strokeStyle = this.strokeStyle;
 };
+
+Graph.prototype.addLegend = function(graph_number) {
+  graph_number = typeof graph_number !== 'undefined' ? graph_number : 0;
+
+  // legend constants
+  legendX = 200;
+  legendY = 50;
+  legend_unit = 10;
+
+  // relationships
+  legendY += (legend_unit + 3) * graph_number;
+
+  // legend square mark
+  var context = this.context;
+  context.beginPath();
+  context.rect(legendX, legendY, legend_unit, legend_unit);
+  context.fillStyle = context.strokeStyle;
+  context.fill();
+
+  // legend text
+  context.font = this.legend_font;
+  context.textAlign = 'left';
+  context.textBaseline = 'middle';
+  context.fillStyle = 'black';
+  context.fillText('title hoge hoge hogeh ohhohohohohohohohoho', legendX + legend_unit + 3, legendY + legend_unit / 2);
+}
 
 Graph.prototype.getRandomColor = function() {
   var letters = '0123456789ABCDEF'.split('');
