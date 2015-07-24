@@ -228,22 +228,20 @@ Graph.prototype.drawLineFromArray = function(filename, arr) {
   }
   context.stroke();
 
-  this.addLegend();
+  this.addLegend(filename, this.imported_plots.length);
 
   // Change back strokeStyle as default
   context.strokeStyle = this.strokeStyle;
 };
 
-Graph.prototype.addLegend = function(graph_number) {
-  graph_number = typeof graph_number !== 'undefined' ? graph_number : 0;
-
+Graph.prototype.addLegend = function(title, graph_number) {
   // legend constants
   legendX = 200;
   legendY = 50;
   legend_unit = 10;
 
   // relationships
-  legendY += (legend_unit + 3) * graph_number;
+  legendY += (legend_unit + 3) * (graph_number - 1);
 
   // legend square mark
   var context = this.context;
@@ -257,7 +255,7 @@ Graph.prototype.addLegend = function(graph_number) {
   context.textAlign = 'left';
   context.textBaseline = 'middle';
   context.fillStyle = 'black';
-  context.fillText('title hoge hoge hogeh ohhohohohohohohohoho', legendX + legend_unit + 3, legendY + legend_unit / 2);
+  context.fillText(title, legendX + legend_unit + 3, legendY + legend_unit / 2);
 }
 
 Graph.prototype.getRandomColor = function() {
