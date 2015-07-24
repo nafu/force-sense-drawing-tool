@@ -204,11 +204,14 @@ Graph.prototype.drawYAxis = function() {
   context.restore();
 }
 
-Graph.prototype.drawLineFromArray = function(arr) {
+Graph.prototype.drawLineFromArray = function(filename, arr) {
   var context = this.context;
   // Change strokeStyle for imported data
   context.strokeStyle = this.getRandomColor();
   context.beginPath();
+  this.imported_plots.push({title: filename, data: arr});
+  log('this.imported_plots');
+  log(this.imported_plots);
   log('arr[0]');
   log(arr[0]);
   context.moveTo(this.convertXToGraphPoint(arr[0]['1']), this.convertYToGraphPoint(arr[0]['3']));
