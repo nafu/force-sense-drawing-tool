@@ -5,8 +5,13 @@ function Graph(config) {
   this.canvas = document.getElementById(config.canvasId);
   var sketch = document.querySelector('#sketch');
   var sketch_style = getComputedStyle(sketch);
-  this.canvas.width = parseInt(sketch_style.getPropertyValue('width'));
-  this.canvas.height = parseInt(sketch_style.getPropertyValue('height'));
+  this.canvas.width = parseInt(sketch_style.getPropertyValue('width')) * 2;
+  this.canvas.height = parseInt(sketch_style.getPropertyValue('height')) * 2;
+  this.canvas.style.width = sketch_style.getPropertyValue('width');
+  this.canvas.style.height = sketch_style.getPropertyValue('height');
+  log(this.canvas);
+  log(this.canvas.style.width);
+  log(this.canvas.style.height);
 
   // graph
   this.xlabel = config.xlabel;
@@ -15,7 +20,7 @@ function Graph(config) {
   this.maxY = config.maxY;
   this.unitsPerTick = config.unitsPerTick;
   this.originX = 70;
-  this.originY = this.canvas.height - 50;
+  this.originY = parseInt(this.canvas.style.height) - 50;
 
   // user interaction
   this.mouse = {x: 0, y: 0};
@@ -37,9 +42,9 @@ function Graph(config) {
   this.legend_font = '12pt Calibri';
 
   // relationships
-  graphWidth = this.canvas.width - this.originX;
+  graphWidth = parseInt(this.canvas.style.width) - this.originX;
   graphHeight = this.originY;
-  this.context = this.canvas.getContext('2d')
+  this.context = this.canvas.getContext('2d');
   this.rangeX = this.maxX - this.minX;
   this.rangeY = this.maxY - this.minY;
   this.unitX = graphWidth / this.rangeX;
@@ -66,6 +71,7 @@ Graph.prototype.setupInitialContext = function() {
   context.lineJoin = 'round';
   context.lineCap = 'round';
   context.strokeStyle = this.strokeStyle;
+  context.scale(2, 2);
 }
 
 Graph.prototype.constructEventListner = function(_self) {
@@ -120,7 +126,7 @@ Graph.prototype.drawXAxis = function() {
   context.save();
   context.beginPath();
   context.moveTo(axisX, axisY);
-  context.lineTo(this.canvas.width, this.originY);
+  context.lineTo(parseInt(this.canvas.style.width), this.originY);
   context.strokeStyle = this.axisColor;
   context.lineWidth = 2;
   context.stroke();
@@ -136,7 +142,7 @@ Graph.prototype.drawXAxis = function() {
   log(xPos);
   log('unit');
   log(unit);
-  while(xPos < this.canvas.width) {
+  while(xPos < parseInt(this.canvas.style.width)) {
     log('while');
     context.moveTo(xPos, axisY - this.tickSize / 2);
     context.lineTo(xPos, axisY);
