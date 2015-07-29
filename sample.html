@@ -13,6 +13,8 @@
     <div class="fileio">
       <input id="readfile" type="file" onchange="window.loadFile(event)"/>
       <button onclick="window.exportData()">Export data to CSV file</button>
+      <span>Filename:</span>
+      <input id="filename" type="text" name="filename" placeholder="Input filename here.">
     </div>
     <div id="sketch">
       <canvas id="paint"></canvas>
