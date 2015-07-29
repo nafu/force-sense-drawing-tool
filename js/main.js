@@ -16,7 +16,7 @@
     log('plots = ', plots);
     log('myGraph.plots = ', myGraph.plots);
     plots.unshift(['x', 'y']);
-    var filename = 'force';
+    var filename = document.getElementById('filename').value || 'force';
     alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
     plots = []
   };
