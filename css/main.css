@@ -54,10 +54,31 @@ table {
 }
 
 .fileio {
-  width: 800px;
-  height: 40px;
-  padding-top: 10px;
+  width: 820px;
+  height: 60px;
   margin: 0 auto;
+  background-color: #f1f1f1;
+}
+
+.fileio > * {
+  height: 35px;
+  margin-top: 17px;
+}
+
+.fileio span {
+  margin-left: 30px;
+  color: blue;
+}
+
+.fileio #filename {
+  height: 25px;
+  border: 1px solid #fefefe;
+}
+
+.fileio button {
+  width: 150px;
+  height: 25px;
+  background-color: white;
 }
 
 #sketch {
