@@ -280,3 +280,9 @@ Graph.prototype.convertXToGraphPoint = function(x) {
 Graph.prototype.convertYToGraphPoint = function(y) {
   return this.originY - (y * this.scaleY)
 }
+
+Graph.prototype.exportData = function() {
+  var plots = [].concat(this.plots);
+  plots.unshift(['x', 'y']);
+  return plots;
+}
