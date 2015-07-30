@@ -1,12 +1,23 @@
 (function() {
-  var myGraph = new Graph({
-    canvasId: 'paint',
+  // Common options
+  var options = {
     xlabel: 'Depth(mm)',
     ylabel: 'Force(N)',
     maxX: 12,
     maxY: 15,
     unitsPerTick: 1
-  });
+  }
+
+  // Background canvas options
+  var backgroundOptions = options;
+  backgroundOptions['canvasId'] = 'layer1';
+  var backgroundGraph = new Graph(backgroundOptions);
+
+  // Main canvas options - User drawing
+  var myOptions = options;
+  myOptions['canvasId'] = 'layer2';
+  var myGraph = new Graph(myOptions);
+
   log('myGraph');
   log(myGraph);
 
@@ -53,7 +64,7 @@
       log(data);
       arr = removeHeader(data);
       log(arr);
-      myGraph.drawLineFromArray(filename, arr);
+      backgroundGraph.drawLineFromArray(filename, arr);
     });
   };
 }());
