@@ -81,8 +81,9 @@ Graph.prototype.constructEventListner = function(_self) {
     _self.last_mouse.x = _self.mouse.x;
     _self.last_mouse.y = _self.mouse.y;
 
-    _self.mouse.x = e.pageX - this.offsetLeft;
-    _self.mouse.y = e.pageY - this.offsetTop;
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.pageY - this.offsetTop - 70;
   }, false);
 
   this.onPaintRef = _self.onPaint.bind(_self);
