@@ -17,6 +17,11 @@
     alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
   };
 
+  window.clearUserInput = function clearUserInput() {
+    log("clearUserInput");
+    myGraph.clearUserInput();
+  }
+
   document.addEventListener("mouseout", function(e) {
     e = e ? e : window.event;
     var from = e.relatedTarget || e.toElement;

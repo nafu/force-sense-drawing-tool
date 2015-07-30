@@ -291,3 +291,10 @@ Graph.prototype.exportData = function() {
   plots.unshift(['x', 'y']);
   return plots;
 }
+
+Graph.prototype.clearUserInput = function() {
+  log('Graph.clearUserInput');
+  var context = this.context;
+  context.clearRect(0, 0, parseInt(this.canvas.style.width), parseInt(this.canvas.style.height));
+  this.plots = []
+}
