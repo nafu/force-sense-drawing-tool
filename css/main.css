@@ -87,4 +87,19 @@ table {
   height: 600px;
   margin: 0 auto;
   border: 10px solid gray;
+  position: relative;
+}
+
+#layer1 {
+  z-index: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#layer2 {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
