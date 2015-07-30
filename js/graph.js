@@ -114,7 +114,7 @@ Graph.prototype.onPaint = function() {
   context.stroke();
   log('mouse.x = ' + this.mouse.x);
   log('mouse.y = ' + this.mouse.y);
-  this.plots.push([this.mouse.x, 600 - this.mouse.y]);
+  this.plots.push([this.mouse.x, this.mouse.y]);
   log('plots = ' + this.plots);
 }
 
@@ -283,6 +283,10 @@ Graph.prototype.convertYToGraphPoint = function(y) {
 
 Graph.prototype.exportData = function() {
   var plots = [].concat(this.plots);
+  for (i = 0; i < plots.length; i++) {
+    canvas_data = plots[i]
+    plots[i] = [(canvas_data[0] - this.originX) / this.unitX, (this.originY - canvas_data[1]) / this.unitY]
+  }
   plots.unshift(['x', 'y']);
   return plots;
 }
