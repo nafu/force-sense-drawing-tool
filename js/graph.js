@@ -286,10 +286,16 @@ Graph.prototype.exportData = function() {
   var plots = [].concat(this.plots);
   for (i = 0; i < plots.length; i++) {
     canvas_data = plots[i]
-    plots[i] = [(canvas_data[0] - this.originX) / this.unitX, (this.originY - canvas_data[1]) / this.unitY]
+    x = (canvas_data[0] - this.originX) / this.unitX
+    y = (this.originY - canvas_data[1]) / this.unitY
+    plots[i] = this.roundExportData(x, y);
   }
   plots.unshift(['x', 'y']);
   return plots;
+}
+
+Graph.prototype.roundExportData = function(x, y) {
+  return [Math.round(x * 100) / 100, Math.round(y * 100) / 100];
 }
 
 Graph.prototype.clearUserInput = function() {
