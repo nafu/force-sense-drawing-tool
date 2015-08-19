@@ -4,7 +4,7 @@
     xlabel: 'Depth(mm)',
     ylabel: 'Force(N)',
     maxX: 12,
-    maxY: 15,
+    maxY: 12,
     unitsPerTick: 1
   }
 
