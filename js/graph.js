@@ -214,7 +214,7 @@ Graph.prototype.drawYAxis = function() {
 Graph.prototype.drawLineFromArray = function(filename, arr) {
   var context = this.context;
   // Change strokeStyle for imported data
-  context.strokeStyle = this.getRandomColor();
+  context.strokeStyle = this.getRandomColor(this.imported_plots.length);
   context.beginPath();
   this.imported_plots.push({title: filename, data: arr});
   log('this.imported_plots');
@@ -265,7 +265,19 @@ Graph.prototype.addLegend = function(title, graph_number) {
   context.fillText(title, legendX + legend_unit + 3, legendY + legend_unit / 2);
 }
 
-Graph.prototype.getRandomColor = function() {
+Graph.prototype.getRandomColor = function(seed) {
+  // Comment out below codes if you want to fix colors.
+  // This feature would be better to be provided as an option,
+  // but this won't be used as a normal use in the current thinking.
+  // That's why I just put these line as a comment,
+  // although it might be a bad idea as an software engineer.
+  //
+  // seed = typeof seed !== 'undefined' ? seed : 0;
+  // if (seed == 0) {
+  //   return '#103FFB';
+  // }
+  // return '#00B866';
+  //
   var letters = '0123456789ABCDEF'.split('');
   var color = '#';
   for (var i = 0; i < 6; i++ ) {
