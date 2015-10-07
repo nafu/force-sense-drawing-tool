@@ -205,8 +205,10 @@ Graph.prototype.drawYAxis = function() {
     log(unit);
   }
 
-  // draw x-axis label
-  context.fillText(this.ylabel, axisX - 3 - 15, this.centerY);
+  // draw y-axis label
+  context.translate(axisX - 14 /* axis font size */ - 14 /* label font size */, this.centerY - 14 /* label font size */ * 3);
+  context.rotate(-0.5*Math.PI);
+  context.fillText(this.ylabel, 0, 0);
 
   context.restore();
 }
@@ -245,7 +247,7 @@ Graph.prototype.addLegend = function(title, graph_number) {
   // legend constants
   legendX = 200;
   legendY = 50;
-  legend_unit = 10;
+  legend_unit = 20;
 
   // relationships
   legendY += (legend_unit + 3) * (graph_number - 1);
