@@ -36,10 +36,10 @@ function Graph(config) {
   this.minX = 0;
   this.minY = 0;
   this.axisColor = '#aaa';
-  this.font = '8pt Calibri';
+  this.font = '14pt Calibri';
   this.tickSize = 20;
   this.strokeStyle = 'blue'
-  this.legend_font = '12pt Calibri';
+  this.legend_font = '21pt Calibri';
 
   // relationships
   graphWidth = parseInt(this.canvas.style.width) - this.originX;
