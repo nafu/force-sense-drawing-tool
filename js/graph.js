@@ -89,21 +89,58 @@ Graph.prototype.constructEventListner = function(_self) {
   this.onPaintRef = _self.onPaint.bind(_self);
 
   // Touch
-  this.canvas.addEventListener('touchmove', _self.onPaintRef, false);
+  this.canvas.addEventListener('touchstart', function(e) {
+    log('touchstart');
+    log(_self.last_mouse);
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.touches[0].pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.touches[0].pageY - this.offsetTop - 70;
+
+    _self.last_mouse.x = _self.mouse.x;
+    _self.last_mouse.y = _self.mouse.y;
+  }, false);
+
+  this.canvas.addEventListener('touchmove', function(e) {
+    log('touchmove');
+    log(_self.last_mouse);
+    _self.last_mouse.x = _self.mouse.x;
+    _self.last_mouse.y = _self.mouse.y;
+
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.touches[0].pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.touches[0].pageY - this.offsetTop - 70;
+  }, false);
+
+  this.canvas.addEventListener('touchstart', function() {
+    log('canvas touchstart')
+    this.addEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchend', function() {
+    log('canvas touchend')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchcancel', function() {
+    log('canvas touchcancel')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchleave', function() {
+    log('canvas touchleave')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
 
   // Mouse
-  this.canvas.addEventListener('mousedown', function() {
-    log('canvas mousedown')
-    this.addEventListener('mousemove', _self.onPaintRef, false);
-  }, false);
-  this.canvas.addEventListener('mouseup', function() {
-    log('canvas mouseup')
-    this.removeEventListener('mousemove', _self.onPaintRef, false);
-  }, false);
-  this.canvas.addEventListener('mouseout', function() {
-    log('canvas mouseout')
-    this.removeEventListener('mousemove', _self.onPaintRef, false);
-  }, false);
+  // this.canvas.addEventListener('mousedown', function() {
+    // log('canvas mousedown')
+    // this.addEventListener('mousemove', _self.onPaintRef, false);
+  // }, false);
+  // this.canvas.addEventListener('mouseup', function() {
+    // log('canvas mouseup')
+    // this.removeEventListener('mousemove', _self.onPaintRef, false);
+  // }, false);
+  // this.canvas.addEventListener('mouseout', function() {
+    // log('canvas mouseout')
+    // this.removeEventListener('mousemove', _self.onPaintRef, false);
+  // }, false);
 }
 
 Graph.prototype.onPaint = function() {
