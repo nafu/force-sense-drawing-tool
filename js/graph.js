@@ -129,18 +129,18 @@ Graph.prototype.constructEventListner = function(_self) {
   }, false);
 
   // Mouse
-  // this.canvas.addEventListener('mousedown', function() {
-    // log('canvas mousedown')
-    // this.addEventListener('mousemove', _self.onPaintRef, false);
-  // }, false);
-  // this.canvas.addEventListener('mouseup', function() {
-    // log('canvas mouseup')
-    // this.removeEventListener('mousemove', _self.onPaintRef, false);
-  // }, false);
-  // this.canvas.addEventListener('mouseout', function() {
-    // log('canvas mouseout')
-    // this.removeEventListener('mousemove', _self.onPaintRef, false);
-  // }, false);
+  this.canvas.addEventListener('mousedown', function() {
+    log('canvas mousedown')
+    this.addEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('mouseup', function() {
+    log('canvas mouseup')
+    this.removeEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('mouseout', function() {
+    log('canvas mouseout')
+    this.removeEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
 }
 
 Graph.prototype.onPaint = function() {
