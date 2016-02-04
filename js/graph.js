@@ -1,3 +1,10 @@
+/**
+ * @fileOverview 力覚電子カルテ用グラフ描画クラス
+ *
+ * @author Fumiya Nakamura
+ * @version 1.0.0
+ */
+
 function Graph(config) {
   // user defined properties
 
