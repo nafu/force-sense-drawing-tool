@@ -5,6 +5,25 @@
  * @version 1.0.0
  */
 
+/**
+ * グラフを作成します。
+ *
+ * @class 力覚カルテ（グラフ）のクラスです。<br>
+ * 力覚カルテの情報を保持し、それらを取り扱う機能を保有します。
+ *
+ * @param {Hash} config 設定情報
+ *
+ * @example
+ * var myOptions = {
+ *   canvasId: 'layer1',  // グラフを描画するcanvas要素のid
+ *   xlabel: 'Depth(mm)', // x軸のラベル
+ *   ylabel: 'Force(N)',  // y軸のラベル
+ *   maxX: 12,            // x軸の最大値
+ *   maxY: 12,            // y軸の最大値
+ *   unitsPerTick: 1      // 目盛り間隔
+ * }
+ * var myGraph = new Graph(myOptions);
+ */
 function Graph(config) {
   // user defined properties
 
