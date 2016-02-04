@@ -28,6 +28,10 @@ function Graph(config) {
   // user defined properties
 
   // canvas
+  /**
+   * 参照するcanvas要素
+   * @return {HTMLCanvasElement}
+   */
   this.canvas = document.getElementById(config.canvasId);
   var sketch = document.querySelector('#sketch');
   var sketch_style = getComputedStyle(sketch);
