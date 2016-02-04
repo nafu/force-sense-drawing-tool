@@ -44,12 +44,40 @@ function Graph(config) {
   log(this.canvas.style.height);
 
   // graph
+  /**
+   * x軸のラベル
+   * @return {String}
+   */
   this.xlabel = config.xlabel;
+  /**
+   * y軸のラベル
+   * @return {String}
+   */
   this.ylabel = config.ylabel;
+  /**
+   * x軸の最大値
+   * @return {Number}
+   */
   this.maxX = config.maxX;
+  /**
+   * y軸の最大値
+   * @return {Number}
+   */
   this.maxY = config.maxY;
+  /**
+   * 目盛り間隔
+   * @return {Number}
+   */
   this.unitsPerTick = config.unitsPerTick;
+  /**
+   * 原点のx位置（左上の位置が0）
+   * @return {Number}
+   */
   this.originX = 70;
+  /**
+   * 原点のy位置（左上の位置が0）
+   * @return {Number}
+   */
   this.originY = parseInt(this.canvas.style.height) - 50;
 
   // user interaction
