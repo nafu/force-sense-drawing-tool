@@ -193,12 +193,6 @@ function Graph(config) {
    * @return {Number}
    */
   this.centerY = Math.round(graphHeight / 2);
-  this.scaleX = graphWidth / this.rangeX;
-  this.scaleY = graphHeight / this.rangeY;
-  log('scaleX');
-  log(this.scaleX);
-  log('scaleY');
-  log(this.scaleY);
 
   var _self = this;
   this.setupInitialContext();
@@ -468,11 +462,11 @@ Graph.prototype.getRandomColor = function(seed) {
 }
 
 Graph.prototype.convertXToGraphPoint = function(x) {
-  return this.originX + (x * this.scaleX)
+  return this.originX + (x * this.unitX)
 }
 
 Graph.prototype.convertYToGraphPoint = function(y) {
-  return this.originY - (y * this.scaleY)
+  return this.originY - (y * this.unitY)
 }
 
 Graph.prototype.exportData = function() {
