@@ -107,12 +107,52 @@ function Graph(config) {
   this.imported_plots = []
 
   // constants
+  /**
+   * xの最小値
+   * @return {Number}
+   */
   this.minX = 0;
+  /**
+   * yの最小値
+   * @return {Number}
+   */
   this.minY = 0;
+  /**
+   * xy軸の色
+   * @return {String}
+   *
+   * @example
+   * this.axisColor = '#000';
+   */
   this.axisColor = '#aaa';
+  /**
+   * ラベルのフォントサイズ
+   * @return {String}
+   *
+   * @example
+   * this.font = '14pt Calibri';
+   */
   this.font = '14pt Calibri';
+  /**
+   * 目盛りサイズ
+   * @return {Number}
+   */
   this.tickSize = 20;
+  /**
+   * ユーザーが描画する線の色
+   * @return {String}
+   *
+   * @example
+   * this.strokeStyle = 'blue'
+   */
   this.strokeStyle = 'blue'
+  /**
+   * 凡例のフォントサイズ
+   * @return {String}
+   *
+   * @example
+   * this.font = '21pt Calibri';
+   */
   this.legend_font = '21pt Calibri';
 
   // relationships
