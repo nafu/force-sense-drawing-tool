@@ -158,12 +158,40 @@ function Graph(config) {
   // relationships
   graphWidth = parseInt(this.canvas.style.width) - this.originX;
   graphHeight = this.originY;
+  /**
+   * canvas要素のcontext
+   * @return {CanvasRenderingContext2D}
+   */
   this.context = this.canvas.getContext('2d');
+  /**
+   * x軸の値の差
+   * @return {Number}
+   */
   this.rangeX = this.maxX - this.minX;
+  /**
+   * y軸の値の差
+   * @return {Number}
+   */
   this.rangeY = this.maxY - this.minY;
+  /**
+   * xの単位あたりの描画長さ
+   * @return {Number}
+   */
   this.unitX = graphWidth / this.rangeX;
+  /**
+   * yの単位あたりの描画長さ
+   * @return {Number}
+   */
   this.unitY = graphHeight / this.rangeY;
+  /**
+   * x軸の中心位置
+   * @return {Number}
+   */
   this.centerX = Math.round(graphWidth / 2) + this.originX;
+  /**
+   * y軸の中心位置
+   * @return {Number}
+   */
   this.centerY = Math.round(graphHeight / 2);
   this.scaleX = graphWidth / this.rangeX;
   this.scaleY = graphHeight / this.rangeY;
