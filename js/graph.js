@@ -93,9 +93,17 @@ function Graph(config) {
   this.last_mouse = {x: 0, y: 0};
 
   // user drawing plots
+  /**
+   * ユーザーが描画したグラフの位置データの配列
+   * @return {Array}
+   */
   this.plots = []
 
   // imported plots
+  /**
+   * 読み込んだグラフの位置データの配列
+   * @return {Array}
+   */
   this.imported_plots = []
 
   // constants
