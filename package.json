@@ -1,0 +1,23 @@
+{
+  "name": "force-sence-chart",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "jsdoc": "^3.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nafu/force-sense-drawing-tool.git"
+  },
+  "author": "Fumiya Nakamura",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nafu/force-sense-drawing-tool/issues"
+  },
+  "homepage": "https://github.com/nafu/force-sense-drawing-tool#readme"
+}
