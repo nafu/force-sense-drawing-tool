@@ -81,7 +81,15 @@ function Graph(config) {
   this.originY = parseInt(this.canvas.style.height) - 50;
 
   // user interaction
+  /**
+   * 現在のマウス位置（canvas位置に応じて調整する）
+   * @return {Hash}
+   */
   this.mouse = {x: 0, y: 0};
+  /**
+   * 直前のマウス位置
+   * @return {Hash}
+   */
   this.last_mouse = {x: 0, y: 0};
 
   // user drawing plots
