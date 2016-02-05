@@ -201,6 +201,13 @@ function Graph(config) {
   this.drawYAxis();
 }
 
+/**
+ * contextの初期設定を行なう
+ * {@link https://www.w3.org/TR/2dcontext/}
+ *
+ * @example
+ * graph.setupInitialContext();
+ */
 Graph.prototype.setupInitialContext = function() {
   var context = this.context;
   context.lineWidth = 5;
