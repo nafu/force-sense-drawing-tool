@@ -217,6 +217,12 @@ Graph.prototype.setupInitialContext = function() {
   context.scale(2, 2);
 }
 
+/**
+ * マウスやタッチイベントの設定を行なう
+ *
+ * @example
+ * graph.constructEventListner();
+ */
 Graph.prototype.constructEventListner = function(_self) {
   /* Mouse Capturing Work */
   this.canvas.addEventListener('mousemove', function(e) {
@@ -286,6 +292,9 @@ Graph.prototype.constructEventListner = function(_self) {
   }, false);
 }
 
+/**
+ * ユーザーが描画する際に用いられる関数
+ */
 Graph.prototype.onPaint = function() {
   var context = this.context;
   context.beginPath();
@@ -299,6 +308,9 @@ Graph.prototype.onPaint = function() {
   log('plots = ' + this.plots);
 }
 
+/**
+ * x軸を描画する関数
+ */
 Graph.prototype.drawXAxis = function() {
   log('drawXAxis');
   var axisX = this.originX;
@@ -344,6 +356,9 @@ Graph.prototype.drawXAxis = function() {
   context.restore();
 }
 
+/**
+ * y軸を描画する関数
+ */
 Graph.prototype.drawYAxis = function() {
   log('drawYAxis');
   var axisX = this.originX;
@@ -393,6 +408,9 @@ Graph.prototype.drawYAxis = function() {
   context.restore();
 }
 
+/**
+ * インポートした力覚データからグラフを描画する
+ */
 Graph.prototype.drawLineFromArray = function(filename, arr) {
   var context = this.context;
   // Change strokeStyle for imported data
@@ -423,6 +441,9 @@ Graph.prototype.drawLineFromArray = function(filename, arr) {
   context.strokeStyle = this.strokeStyle;
 };
 
+/**
+ * 凡例を追加する
+ */
 Graph.prototype.addLegend = function(title, graph_number) {
   // legend constants
   legendX = 200;
@@ -447,6 +468,12 @@ Graph.prototype.addLegend = function(title, graph_number) {
   context.fillText(title, legendX + legend_unit + 3, legendY + legend_unit / 2);
 }
 
+/**
+ * 色を自動生成する
+ *
+ * @example
+ * graph.getRandomColor();
+ */
 Graph.prototype.getRandomColor = function(seed) {
   // Comment out below codes if you want to fix colors.
   // This feature would be better to be provided as an option,
@@ -468,14 +495,26 @@ Graph.prototype.getRandomColor = function(seed) {
   return color;
 }
 
+/**
+ * 力覚データの深さをcanvasのx軸データに変換する
+ */
 Graph.prototype.convertXToGraphPoint = function(x) {
   return this.originX + (x * this.unitX)
 }
 
+/**
+ * 力覚データの荷重をcanvasのy軸データに変換する
+ */
 Graph.prototype.convertYToGraphPoint = function(y) {
   return this.originY - (y * this.unitY)
 }
 
+/**
+ * 描画した力覚データを書き出す
+ *
+ * @example
+ * graph.exportData();
+ */
 Graph.prototype.exportData = function() {
   var plots = [].concat(this.plots);
   for (i = 0; i < plots.length; i++) {
@@ -488,10 +527,22 @@ Graph.prototype.exportData = function() {
   return plots;
 }
 
+/**
+ * 書き出しデータ用に小数点2桁で打ち切る
+ *
+ * @example
+ * graph.roundExportData();
+ */
 Graph.prototype.roundExportData = function(x, y) {
   return [Math.round(x * 100) / 100, Math.round(y * 100) / 100];
 }
 
+/**
+ * ユーザーが描画したデータを消す
+ *
+ * @example
+ * graph.clearUserInput();
+ */
 Graph.prototype.clearUserInput = function() {
   log('Graph.clearUserInput');
   var context = this.context;
