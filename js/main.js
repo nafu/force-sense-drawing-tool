@@ -88,6 +88,7 @@
     log(event);
     var files = event.target.files;
     var filename = files[0].name;
+    // See more: https://github.com/agershun/alasql
     alasql('SELECT * FROM CSV(?, {headers: false})', [event],function(data) {
       // Process data here
       log(data);
