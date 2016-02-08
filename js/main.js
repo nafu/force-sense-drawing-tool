@@ -1,3 +1,10 @@
+/**
+ * @fileOverview 力覚電子カルテ用メインファイル
+ *
+ * @author Fumiya Nakamura
+ * @version 1.0.0
+ */
+
 (function() {
   // Common options
   var options = {
@@ -21,6 +28,12 @@
   log('myGraph');
   log(myGraph);
 
+  /**
+   * ユーザーが描画した力覚データを出力する
+   *
+   * @namespace window
+   * @function exportData
+   */
   window.exportData = function exportData() {
     log('exportData');
     var plots = myGraph.exportData();
@@ -28,11 +41,21 @@
     alasql("SELECT * INTO CSV('" + filename + ".csv') FROM ?", [plots]);
   };
 
+  /**
+   * ユーザーが描画した力覚データを削除する
+   *
+   * @namespace window
+   * @function clearUserInput
+   */
   window.clearUserInput = function clearUserInput() {
     log("clearUserInput");
     myGraph.clearUserInput();
   }
 
+  /**
+   * mouseoutイベントを定義する
+   * mouseが描画領域から外れた時にmousemoveイベントを削除する
+   */
   document.addEventListener("mouseout", function(e) {
     e = e ? e : window.event;
     var from = e.relatedTarget || e.toElement;
@@ -43,9 +66,9 @@
   });
 
   /**
-   * Remove first 3 row
+   * 力覚データベースのヘッダーを取り除く
    *
-   * @param {array} arr - The array of the plots from csv
+   * @param {array} arr 力覚データベースCSVファイルから生成した配列
    */
   function removeHeader(arr) {
     for(i = 0; i < 3; i++) {
@@ -54,6 +77,12 @@
     return arr
   };
 
+  /**
+   * 力覚データベースを読み込み、描画する
+   *
+   * @namespace window
+   * @function loadFile
+   */
   window.loadFile = function loadFile(event) {
     log('event');
     log(event);
