@@ -18,11 +18,13 @@
   // Background canvas options
   var backgroundOptions = options;
   backgroundOptions['canvasId'] = 'layer1';
+  // backgroundGraphには読み込んだ力覚データベースを描画する
   var backgroundGraph = new Graph(backgroundOptions);
 
   // Main canvas options - User drawing
   var myOptions = options;
   myOptions['canvasId'] = 'layer2';
+  // myGraphにはユーザーの操作に応じて描画する
   var myGraph = new Graph(myOptions);
 
   log('myGraph');
