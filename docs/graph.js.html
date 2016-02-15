@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileOverview 力覚電子カルテ用グラフ描画クラス
+ *
+ * @author Fumiya Nakamura
+ * @version 1.0.0
+ */
+
+/**
+ * グラフを作成します。
+ *
+ * @class 力覚カルテ（グラフ）のクラスです。&lt;br>
+ * 力覚カルテの情報を保持し、それらを取り扱う機能を保有します。
+ *
+ * @param {Hash} config 設定情報
+ *
+ * @example
+ * var myOptions = {
+ *   canvasId: 'layer1',  // グラフを描画するcanvas要素のid
+ *   xlabel: 'Depth(mm)', // x軸のラベル
+ *   ylabel: 'Force(N)',  // y軸のラベル
+ *   maxX: 12,            // x軸の最大値
+ *   maxY: 12,            // y軸の最大値
+ *   unitsPerTick: 1      // 目盛り間隔
+ * }
+ * var myGraph = new Graph(myOptions);
+ */
+function Graph(config) {
+  // user defined properties
+
+  // canvas
+  /**
+   * 参照するcanvas要素
+   * @return {HTMLCanvasElement}
+   */
+  this.canvas = document.getElementById(config.canvasId);
+  var sketch = document.querySelector('#sketch');
+  var sketch_style = getComputedStyle(sketch);
+  this.canvas.width = parseInt(sketch_style.getPropertyValue('width')) * 2;
+  this.canvas.height = parseInt(sketch_style.getPropertyValue('height')) * 2;
+  this.canvas.style.width = sketch_style.getPropertyValue('width');
+  this.canvas.style.height = sketch_style.getPropertyValue('height');
+  log(this.canvas);
+  log(this.canvas.style.width);
+  log(this.canvas.style.height);
+
+  // graph
+  /**
+   * x軸のラベル
+   * @return {String}
+   */
+  this.xlabel = config.xlabel;
+  /**
+   * y軸のラベル
+   * @return {String}
+   */
+  this.ylabel = config.ylabel;
+  /**
+   * x軸の最大値
+   * @return {Number}
+   */
+  this.maxX = config.maxX;
+  /**
+   * y軸の最大値
+   * @return {Number}
+   */
+  this.maxY = config.maxY;
+  /**
+   * 目盛り間隔
+   * @return {Number}
+   */
+  this.unitsPerTick = config.unitsPerTick;
+  /**
+   * 原点のx位置（左上の位置が0）
+   * @return {Number}
+   */
+  this.originX = 70;
+  /**
+   * 原点のy位置（左上の位置が0）
+   * @return {Number}
+   */
+  this.originY = parseInt(this.canvas.style.height) - 50;
+
+  // user interaction
+  /**
+   * 現在のマウス位置（canvas位置に応じて調整する）
+   * @return {Hash}
+   */
+  this.mouse = {x: 0, y: 0};
+  /**
+   * 直前のマウス位置
+   * @return {Hash}
+   */
+  this.last_mouse = {x: 0, y: 0};
+
+  // user drawing plots
+  /**
+   * ユーザーが描画したグラフの位置データの配列
+   * @return {Array}
+   */
+  this.plots = []
+
+  // imported plots
+  /**
+   * 読み込んだグラフの位置データの配列
+   * @return {Array}
+   */
+  this.imported_plots = []
+
+  // constants
+  /**
+   * xの最小値
+   * @return {Number}
+   */
+  this.minX = 0;
+  /**
+   * yの最小値
+   * @return {Number}
+   */
+  this.minY = 0;
+  /**
+   * xy軸の色
+   * @return {String}
+   *
+   * @example
+   * this.axisColor = '#000';
+   */
+  this.axisColor = '#aaa';
+  /**
+   * ラベルのフォントサイズ
+   * @return {String}
+   *
+   * @example
+   * this.font = '14pt Calibri';
+   */
+  this.font = '14pt Calibri';
+  /**
+   * 目盛りサイズ
+   * @return {Number}
+   */
+  this.tickSize = 20;
+  /**
+   * ユーザーが描画する線の色
+   * @return {String}
+   *
+   * @example
+   * this.strokeStyle = 'blue'
+   */
+  this.strokeStyle = 'blue'
+  /**
+   * 凡例のフォントサイズ
+   * @return {String}
+   *
+   * @example
+   * this.font = '21pt Calibri';
+   */
+  this.legend_font = '21pt Calibri';
+
+  // relationships
+  graphWidth = parseInt(this.canvas.style.width) - this.originX;
+  graphHeight = this.originY;
+  /**
+   * canvas要素のcontext
+   * @return {CanvasRenderingContext2D}
+   */
+  this.context = this.canvas.getContext('2d');
+  /**
+   * x軸の値の差
+   * @return {Number}
+   */
+  this.rangeX = this.maxX - this.minX;
+  /**
+   * y軸の値の差
+   * @return {Number}
+   */
+  this.rangeY = this.maxY - this.minY;
+  /**
+   * xの単位あたりの描画長さ
+   * @return {Number}
+   */
+  this.unitX = graphWidth / this.rangeX;
+  /**
+   * yの単位あたりの描画長さ
+   * @return {Number}
+   */
+  this.unitY = graphHeight / this.rangeY;
+  /**
+   * x軸の中心位置
+   * @return {Number}
+   */
+  this.centerX = Math.round(graphWidth / 2) + this.originX;
+  /**
+   * y軸の中心位置
+   * @return {Number}
+   */
+  this.centerY = Math.round(graphHeight / 2);
+
+  var _self = this;
+  this.setupInitialContext();
+  this.constructEventListner(_self);
+  this.drawXAxis();
+  this.drawYAxis();
+}
+
+/**
+ * contextの初期設定を行なう
+ * {@link https://www.w3.org/TR/2dcontext/}
+ *
+ * @example
+ * graph.setupInitialContext();
+ */
+Graph.prototype.setupInitialContext = function() {
+  var context = this.context;
+  context.lineWidth = 5;
+  context.lineJoin = 'round';
+  context.lineCap = 'round';
+  context.strokeStyle = this.strokeStyle;
+  context.scale(2, 2);
+}
+
+/**
+ * マウスやタッチイベントの設定を行なう
+ *
+ * @example
+ * graph.constructEventListner();
+ */
+Graph.prototype.constructEventListner = function(_self) {
+  /* Mouse Capturing Work */
+  this.canvas.addEventListener('mousemove', function(e) {
+    log(_self.last_mouse);
+    _self.last_mouse.x = _self.mouse.x;
+    _self.last_mouse.y = _self.mouse.y;
+
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.pageY - this.offsetTop - 70;
+  }, false);
+
+  this.onPaintRef = _self.onPaint.bind(_self);
+
+  // Touch
+  this.canvas.addEventListener('touchstart', function(e) {
+    log('touchstart');
+    log(_self.last_mouse);
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.touches[0].pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.touches[0].pageY - this.offsetTop - 70;
+
+    _self.last_mouse.x = _self.mouse.x;
+    _self.last_mouse.y = _self.mouse.y;
+  }, false);
+
+  this.canvas.addEventListener('touchmove', function(e) {
+    log('touchmove');
+    log(_self.last_mouse);
+    _self.last_mouse.x = _self.mouse.x;
+    _self.last_mouse.y = _self.mouse.y;
+
+    // Calibrate relative position x = 100, y = 70
+    _self.mouse.x = e.touches[0].pageX - this.offsetLeft - 100;
+    _self.mouse.y = e.touches[0].pageY - this.offsetTop - 70;
+  }, false);
+
+  this.canvas.addEventListener('touchstart', function() {
+    log('canvas touchstart')
+    this.addEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchend', function() {
+    log('canvas touchend')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchcancel', function() {
+    log('canvas touchcancel')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('touchleave', function() {
+    log('canvas touchleave')
+    this.removeEventListener('touchmove', _self.onPaintRef, false);
+  }, false);
+
+  // Mouse
+  this.canvas.addEventListener('mousedown', function() {
+    log('canvas mousedown')
+    this.addEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('mouseup', function() {
+    log('canvas mouseup')
+    this.removeEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
+  this.canvas.addEventListener('mouseout', function() {
+    log('canvas mouseout')
+    this.removeEventListener('mousemove', _self.onPaintRef, false);
+  }, false);
+}
+
+/**
+ * ユーザーが描画する際に用いられる関数
+ */
+Graph.prototype.onPaint = function() {
+  var context = this.context;
+  context.beginPath();
+  context.moveTo(this.last_mouse.x, this.last_mouse.y);
+  context.lineTo(this.mouse.x, this.mouse.y);
+  context.closePath();
+  context.stroke();
+  log('mouse.x = ' + this.mouse.x);
+  log('mouse.y = ' + this.mouse.y);
+  this.plots.push([this.mouse.x, this.mouse.y]);
+  log('plots = ' + this.plots);
+}
+
+/**
+ * x軸を描画する関数
+ */
+Graph.prototype.drawXAxis = function() {
+  log('drawXAxis');
+  var axisX = this.originX;
+  var axisY = this.originY;
+  var context = this.context;
+  context.save();
+  context.beginPath();
+  context.moveTo(axisX, axisY);
+  context.lineTo(parseInt(this.canvas.style.width), this.originY);
+  context.strokeStyle = this.axisColor;
+  context.lineWidth = 2;
+  context.stroke();
+
+  // draw tick marks
+  var xPosIncrement = this.unitsPerTick * this.unitX;
+  var xPos = axisX;
+  var unit = 0;
+  context.font = this.font;
+  context.textAlign = 'center';
+  context.textBaseline = 'top';
+  log('xPos');
+  log(xPos);
+  log('unit');
+  log(unit);
+  while(xPos &lt; parseInt(this.canvas.style.width)) {
+    log('while');
+    context.moveTo(xPos, axisY - this.tickSize / 2);
+    context.lineTo(xPos, axisY);
+    context.stroke();
+    context.fillText(unit, xPos, axisY + 3);
+    unit += this.unitsPerTick;
+    xPos = Math.round(xPos + xPosIncrement);
+    log('while')
+    log('xPos');
+    log(xPos);
+    log('unit');
+    log(unit);
+  }
+
+  // draw x-axis label
+  context.fillText(this.xlabel, this.centerX, axisY + 3 + 15)
+
+  context.restore();
+}
+
+/**
+ * y軸を描画する関数
+ */
+Graph.prototype.drawYAxis = function() {
+  log('drawYAxis');
+  var axisX = this.originX;
+  var axisY = this.originY;
+  var context = this.context;
+  context.save();
+  context.beginPath();
+  context.moveTo(axisX, axisY);
+  context.lineTo(axisX, 0);
+  context.strokeStyle = this.axisColor;
+  context.lineWidth = 2;
+  context.stroke();
+
+  // draw tick marks
+  var yPosIncrement = this.unitsPerTick * this.unitY;
+  log('yPosIncrement')
+  log(yPosIncrement)
+  var yPos = axisY;
+  var unit = 0;
+  context.font = this.font;
+  context.textAlign = 'right';
+  context.textBaseline = 'middle';
+  log('yPos');
+  log(yPos);
+  log('unit');
+  log(unit);
+  while(yPos > 0) {
+    log('while');
+    context.moveTo(axisX, yPos);
+    context.lineTo(axisX + this.tickSize / 2, yPos);
+    context.stroke();
+    context.fillText(unit, axisX - 3, yPos);
+    unit += this.unitsPerTick;
+    yPos = Math.round(yPos - yPosIncrement);
+    log('while')
+    log('yPos');
+    log(yPos);
+    log('unit');
+    log(unit);
+  }
+
+  // draw y-axis label
+  context.translate(axisX - 14 /* axis font size */ - 14 /* label font size */, this.centerY - 14 /* label font size */ * 3);
+  context.rotate(-0.5*Math.PI);
+  context.fillText(this.ylabel, 0, 0);
+
+  context.restore();
+}
+
+/**
+ * インポートした力覚データからグラフを描画する
+ */
+Graph.prototype.drawLineFromArray = function(filename, arr) {
+  var context = this.context;
+  // Change strokeStyle for imported data
+  context.strokeStyle = this.getRandomColor(this.imported_plots.length);
+  context.beginPath();
+  this.imported_plots.push({title: filename, data: arr});
+  log('this.imported_plots');
+  log(this.imported_plots);
+  log('arr[0]');
+  log(arr[0]);
+  context.moveTo(this.convertXToGraphPoint(arr[0]['1']), this.convertYToGraphPoint(arr[0]['3']));
+  arr.shift();
+  for(i = 0; i &lt; arr.length; i++) {
+    var dot = arr[i]
+    log('dot');
+    log(dot);
+    log("dot['1'], dot['3']");
+    log(dot['1'] + ',' + dot['3']);
+    // Check if data is empty because perforation data have empty data at last line
+    if(dot['1'].length == 0 || dot['3'].length == 0) { continue; }
+    context.lineTo(this.convertXToGraphPoint(dot['1']), this.convertYToGraphPoint(dot['3']));
+  }
+  context.stroke();
+
+  this.addLegend(filename, this.imported_plots.length);
+
+  // Change back strokeStyle as default
+  context.strokeStyle = this.strokeStyle;
+};
+
+/**
+ * 凡例を追加する
+ */
+Graph.prototype.addLegend = function(title, graph_number) {
+  // legend constants
+  legendX = 200;
+  legendY = 50;
+  legend_unit = 20;
+
+  // relationships
+  legendY += (legend_unit + 3) * (graph_number - 1);
+
+  // legend square mark
+  var context = this.context;
+  context.beginPath();
+  context.rect(legendX, legendY, legend_unit, legend_unit);
+  context.fillStyle = context.strokeStyle;
+  context.fill();
+
+  // legend text
+  context.font = this.legend_font;
+  context.textAlign = 'left';
+  context.textBaseline = 'middle';
+  context.fillStyle = 'black';
+  context.fillText(title, legendX + legend_unit + 3, legendY + legend_unit / 2);
+}
+
+/**
+ * 色を自動生成する
+ *
+ * @example
+ * graph.getRandomColor();
+ */
+Graph.prototype.getRandomColor = function(seed) {
+  // Comment out below codes if you want to fix colors.
+  // This feature would be better to be provided as an option,
+  // but this won't be used as a normal use in the current thinking.
+  // That's why I just put these line as a comment,
+  // although it might be a bad idea as an software engineer.
+  //
+  // seed = typeof seed !== 'undefined' ? seed : 0;
+  // if (seed == 0) {
+  //   return '#103FFB';
+  // }
+  // return '#00B866';
+  //
+  var letters = '0123456789ABCDEF'.split('');
+  var color = '#';
+  for (var i = 0; i &lt; 6; i++ ) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+/**
+ * 力覚データの深さをcanvasのx軸データに変換する
+ */
+Graph.prototype.convertXToGraphPoint = function(x) {
+  return this.originX + (x * this.unitX)
+}
+
+/**
+ * 力覚データの荷重をcanvasのy軸データに変換する
+ */
+Graph.prototype.convertYToGraphPoint = function(y) {
+  return this.originY - (y * this.unitY)
+}
+
+/**
+ * 描画した力覚データを書き出す
+ *
+ * @example
+ * graph.exportData();
+ */
+Graph.prototype.exportData = function() {
+  var plots = [].concat(this.plots);
+  for (i = 0; i &lt; plots.length; i++) {
+    canvas_data = plots[i]
+    x = (canvas_data[0] - this.originX) / this.unitX
+    y = (this.originY - canvas_data[1]) / this.unitY
+    plots[i] = this.roundExportData(x, y);
+  }
+  plots.unshift(['x', 'y']);
+  return plots;
+}
+
+/**
+ * 書き出しデータ用に小数点2桁で打ち切る
+ *
+ * @example
+ * graph.roundExportData();
+ */
+Graph.prototype.roundExportData = function(x, y) {
+  return [Math.round(x * 100) / 100, Math.round(y * 100) / 100];
+}
+
+/**
+ * ユーザーが描画したデータを消す
+ *
+ * @example
+ * graph.clearUserInput();
+ */
+Graph.prototype.clearUserInput = function() {
+  log('Graph.clearUserInput');
+  var context = this.context;
+  context.clearRect(0, 0, parseInt(this.canvas.style.width), parseInt(this.canvas.style.height));
+  this.plots = []
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Graph.html">Graph</a></li></ul><h3>Global</h3><ul><li><a href="global.html#clearUserInput">clearUserInput</a></li><li><a href="global.html#exportData">exportData</a></li><li><a href="global.html#loadFile">loadFile</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Feb 15 2016 15:22:43 GMT+0900 (JST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
